@@ -1,0 +1,22 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  bin = "./tmp/context-vacuum"
+  cmd = "go build -o ./tmp/context-vacuum ./cmd/cli"
+  delay = 1000
+  exclude_dir = ["assets", "tmp", "vendor", ".git"]
+  include_ext = ["go", "sql"]
+  exclude_regex = ["_test\\.go"]
+  include_regex = ["^", "go$"]
+  kill_delay = "0s"
+  send_interrupt = false
+  poll = false
+  poll_interval = 0
+
+[color]
+  main = "magenta"
+  watcher = "cyan"
+  build = "yellow"
+  app = ""
+

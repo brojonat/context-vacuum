@@ -1,0 +1,77 @@
+# Binaries
+bin/
+/context-vacuum
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+*.coverprofile
+coverage.*
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Dependency directories
+vendor/
+
+# IDE directories
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Application data and databases
+.context-vacuum/
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Build artifacts
+tmp/
+dist/
+build/
+
+# Air temporary files
+.air.toml.tmp
+*.tmp
+
+# Logs
+logs/
+*.log
+
+# Environment and config
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Test output
+testdata/*.db
+testdata/*.sqlite
+
+# Generated documentation
+*.md.bak
+
+# Temporary test files
+foo.md
+test*.md
