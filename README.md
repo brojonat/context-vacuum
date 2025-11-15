@@ -6,15 +6,17 @@
 ## Problem & Solution
 
 **The Problem:** LLM code assistants (Cursor, ChatGPT, Claude) often revert to
-less ideal implementations despite having better alternatives. They lack the
-nuanced context needed to maintain specific architectural patterns and API
-choices in your codebase (e.g., ResponseAPI vs. Completions API, Composition API
-vs. Options API).
+less ideal implementations despite having newer, better alternatives (e.g.,
+ResponseAPI vs. Completions API for OpenAI, Composition API vs. Options API for
+Vue, etc.). This will continue to happen as long as API churn exists and LLMs
+have training cutoff dates.
 
 **The Solution:** `context-vacuum` lets you create curated context files that
 override an LLM's default instincts by combining relevant code snippets,
-documentation, and examples. Build custom prompts in a fraction of a second
-instead of minutes.
+documentation, and examples. Instead of messing with a jumble of CLAUDE.md file
+or hoping Cursor's agent picks the right `md` file, you can explicity create a
+fresh markdown file with content you want and pass it to the agent. Build custom
+prompts in a fraction of a second instead of minutes.
 
 ## Features
 
@@ -24,7 +26,7 @@ instead of minutes.
 - 📄 **Multi-source Support**:
   - Local files and directories
   - Web pages (automatic HTML conversion)
-  - Bookmarks from browser bookmark lists
+  - Collections of pages from browser bookmark lists
 - 🎨 **Dual Interface**:
   - **TUI Mode** (default) - Interactive terminal UI for quick toggling
   - **CLI Mode** - Direct command-line invocation for scripting/automation
