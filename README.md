@@ -32,7 +32,6 @@ prompts in a fraction of a second instead of minutes.
   - **CLI Mode** - Direct command-line invocation for scripting/automation
 - 📦 **Single Binary** - No dependencies, just works
 - 🔧 **Flexible Output** - Stdout for piping or files in multiple formats
-- 🔄 **Smart Caching** - Automatic cache refresh when sources change
 
 ## Installation
 
