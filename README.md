@@ -48,12 +48,6 @@ context-vacuum --help
 
 **Note:** Ensure `$GOPATH/bin` (usually `~/go/bin`) is in your PATH.
 
-### Pre-built Binaries
-
-```bash
-# Coming soon - download from releases page
-```
-
 ### Build from Source
 
 ```bash
