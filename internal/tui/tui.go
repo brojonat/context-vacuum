@@ -66,6 +66,10 @@ type model struct {
 	nameInput  textinput.Model
 	pathInput  textinput.Model
 	focusIndex int // 0 = name, 1 = path
+
+	// Delete confirmation
+	deleteConfirm bool
+	deleteTarget  string
 }
 
 func initialModel(store *storage.Store, parser *parser.Parser, logger *slog.Logger) (model, error) {
@@ -88,15 +92,17 @@ func initialModel(store *storage.Store, parser *parser.Parser, logger *slog.Logg
 	pathInput.Width = 50
 
 	return model{
-		store:      store,
-		parser:     parser,
-		logger:     logger,
-		sources:    sources,
-		cursor:     0,
-		addMode:    false,
-		nameInput:  nameInput,
-		pathInput:  pathInput,
-		focusIndex: 0,
+		store:         store,
+		parser:        parser,
+		logger:        logger,
+		sources:       sources,
+		cursor:        0,
+		addMode:       false,
+		nameInput:     nameInput,
+		pathInput:     pathInput,
+		focusIndex:    0,
+		deleteConfirm: false,
+		deleteTarget:  "",
 	}, nil
 }
 
@@ -110,6 +116,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	// Handle add mode separately
 	if m.addMode {
 		return m.updateAddMode(msg)
+	}
+
+	// Handle delete confirmation mode
+	if m.deleteConfirm {
+		return m.updateDeleteConfirm(msg)
 	}
 
 	switch msg := msg.(type) {
@@ -170,6 +181,15 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						m.message = fmt.Sprintf("Toggled %s to %s", source.Name, status)
 					}
 				}
+			}
+
+		case "d":
+			// Delete current source (with confirmation)
+			if len(m.sources) > 0 {
+				source := m.sources[m.cursor]
+				m.deleteConfirm = true
+				m.deleteTarget = source.Name
+				m.message = ""
 			}
 
 		case "r":
@@ -267,6 +287,49 @@ func (m model) updateAddMode(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
+func (m model) updateDeleteConfirm(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "ctrl+c":
+			return m, tea.Quit
+
+		case "y", "Y":
+			// Confirm deletion
+			ctx := context.Background()
+			err := m.store.Queries().DeleteSource(ctx, m.deleteTarget)
+			if err != nil {
+				m.message = fmt.Sprintf("Error deleting: %v", err)
+			} else {
+				// Reload sources
+				sources, err := m.store.Queries().ListSources(ctx)
+				if err != nil {
+					m.message = fmt.Sprintf("Error reloading: %v", err)
+				} else {
+					m.sources = sources
+					// Adjust cursor if needed
+					if m.cursor >= len(m.sources) && m.cursor > 0 {
+						m.cursor = len(m.sources) - 1
+					}
+					m.message = fmt.Sprintf("✓ Deleted source: %s", m.deleteTarget)
+				}
+			}
+			m.deleteConfirm = false
+			m.deleteTarget = ""
+			return m, nil
+
+		case "n", "N", "esc":
+			// Cancel deletion
+			m.deleteConfirm = false
+			m.deleteTarget = ""
+			m.message = "Delete cancelled"
+			return m, nil
+		}
+	}
+
+	return m, nil
+}
+
 // addSource adds a new source to the database
 func (m model) addSource(ctx context.Context, name, path string) error {
 	// Determine source type and parse content
@@ -332,6 +395,12 @@ func (m model) View() string {
 		return b.String()
 	}
 
+	// Show delete confirmation modal
+	if m.deleteConfirm {
+		b.WriteString(m.renderDeleteConfirm())
+		return b.String()
+	}
+
 	// Normal source list view
 	if len(m.sources) == 0 {
 		b.WriteString(normalItemStyle.Render("  No sources found. Press 'a' to add sources."))
@@ -376,7 +445,7 @@ func (m model) View() string {
 		b.WriteString("\n\n")
 	}
 
-	help := "a: add • ↑/k: up • ↓/j: down • space/enter: toggle • r: reload • q: quit"
+	help := "a: add • d: delete • ↑/k: up • ↓/j: down • space/enter: toggle • r: reload • q: quit"
 	b.WriteString(helpStyle.Render(help))
 	b.WriteString("\n")
 
@@ -408,6 +477,22 @@ func (m model) renderAddModal() string {
 		}
 		b.WriteString(msgStyle.Render(m.message))
 	}
+
+	modal := modalStyle.Render(b.String())
+	return modal
+}
+
+func (m model) renderDeleteConfirm() string {
+	var b strings.Builder
+
+	b.WriteString("\n")
+	b.WriteString(errorStyle.Render(fmt.Sprintf("⚠️  Delete source: %s?", m.deleteTarget)))
+	b.WriteString("\n\n")
+	b.WriteString(normalItemStyle.Render("This action cannot be undone."))
+	b.WriteString("\n\n")
+
+	help := helpStyle.Render("[Y] Yes, delete  [N/Esc] Cancel")
+	b.WriteString(help)
 
 	modal := modalStyle.Render(b.String())
 	return modal

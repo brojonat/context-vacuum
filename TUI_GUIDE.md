@@ -20,7 +20,7 @@ context-vacuum tui    # Explicit command
 > [ ] Code Examples (url)
   [✓] Test Files (file)
 
-a: add • ↑/k: up • ↓/j: down • space/enter: toggle • r: reload • q: quit
+a: add • d: delete • ↑/k: up • ↓/j: down • space/enter: toggle • r: reload • q: quit
 ```
 
 ### Key Bindings
@@ -28,6 +28,7 @@ a: add • ↑/k: up • ↓/j: down • space/enter: toggle • r: reload • q
 | Key | Action |
 |-----|--------|
 | `a` | Add new source (opens modal) |
+| `d` | Delete current source (with confirmation) |
 | `↑` or `k` | Move cursor up |
 | `↓` or `j` | Move cursor down |
 | `space` or `enter` | Toggle source enabled/disabled |
@@ -66,6 +67,32 @@ When you press `a`, a modal form appears:
 - Shows errors in red, success in green
 - Newly added sources are enabled by default
 
+### Deleting Sources (Press `d`)
+
+When you press `d` on a source, a confirmation modal appears:
+
+```
+┌────────────────────────────────────────────────────┐
+│                                                    │
+│  ⚠️  Delete source: My Config?                     │
+│                                                    │
+│  This action cannot be undone.                     │
+│                                                    │
+│  [Y] Yes, delete  [N/Esc] Cancel                  │
+│                                                    │
+└────────────────────────────────────────────────────┘
+```
+
+**Confirmation Key Bindings:**
+- `Y` or `y` - Confirm deletion
+- `N` or `n` or `Esc` - Cancel deletion
+
+**Safety Features:**
+- Always requires confirmation
+- Shows source name before deleting
+- Adjusts cursor position if last item deleted
+- Cannot be undone - use with caution!
+
 ### Examples
 
 #### Add a Local File
@@ -83,6 +110,13 @@ When you press `a`, a modal form appears:
 4. Path: "https://example.com/docs"
 5. Press Enter
 6. ✓ URL fetched and cached!
+
+#### Delete a Source
+1. Navigate to source with `↑`/`↓`
+2. Press `d`
+3. Confirmation modal appears
+4. Press `Y` to confirm or `N` to cancel
+5. ✓ Source deleted (if confirmed)
 
 ### Tips
 
@@ -113,9 +147,14 @@ context-vacuum generate > context.md
 
 ### Complete Workflow in TUI
 
-You can do everything from the TUI except:
-- Removing sources (use CLI: `context-vacuum remove "name"`)
+The TUI now supports full source management:
+- ✅ Add sources (press `a`)
+- ✅ Delete sources (press `d`)
+- ✅ Toggle sources on/off (space/enter)
+- ✅ View all sources
+
+For operations not in TUI:
 - Generating output (use CLI: `context-vacuum generate`)
 - Importing bookmarks (use CLI: `context-vacuum import-bookmarks`)
 
-For these operations, quit the TUI (`q`) and use CLI commands.
+Quit the TUI (`q`) and use CLI commands for these operations.

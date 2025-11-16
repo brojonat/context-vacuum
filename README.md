@@ -36,6 +36,18 @@ prompts in a fraction of a second instead of minutes.
 
 ## Installation
 
+### Using Go (Recommended)
+
+```bash
+# Install latest version
+go install github.com/brojonat/context-vacuum@latest
+
+# Verify installation
+context-vacuum --help
+```
+
+**Note:** Ensure `$GOPATH/bin` (usually `~/go/bin`) is in your PATH.
+
 ### Pre-built Binaries
 
 ```bash
@@ -45,9 +57,10 @@ prompts in a fraction of a second instead of minutes.
 ### Build from Source
 
 ```bash
-git clone https://github.com/yourusername/context-vacuum.git
+git clone https://github.com/brojonat/context-vacuum.git
 cd context-vacuum
-go build -o context-vacuum
+make build
+# Binary will be in bin/context-vacuum
 ```
 
 ## Quick Start
@@ -58,7 +71,13 @@ go build -o context-vacuum
 # Launch the interactive terminal UI
 context-vacuum
 
-# Navigate with arrow keys, toggle files with space, press 'g' to generate
+# Key bindings:
+# - 'a' to add sources
+# - 'd' to delete sources (with confirmation)
+# - arrow keys or j/k to navigate
+# - space/enter to toggle enabled/disabled
+# - 'r' to reload
+# - 'q' to quit
 ```
 
 ### CLI Mode (Direct)

@@ -12,14 +12,14 @@ lint:
 
 .PHONY: build
 build:
-	go build -o bin/context-vacuum ./cmd/context-vacuum
+	go build -o bin/context-vacuum .
 
 .PHONY: build-all
 build-all:
-	GOOS=darwin GOARCH=amd64 go build -o bin/context-vacuum-darwin-amd64 ./cmd/context-vacuum
-	GOOS=darwin GOARCH=arm64 go build -o bin/context-vacuum-darwin-arm64 ./cmd/context-vacuum
-	GOOS=linux GOARCH=amd64 go build -o bin/context-vacuum-linux-amd64 ./cmd/context-vacuum
-	GOOS=windows GOARCH=amd64 go build -o bin/context-vacuum-windows-amd64.exe ./cmd/context-vacuum
+	GOOS=darwin GOARCH=amd64 go build -o bin/context-vacuum-darwin-amd64 .
+	GOOS=darwin GOARCH=arm64 go build -o bin/context-vacuum-darwin-arm64 .
+	GOOS=linux GOARCH=amd64 go build -o bin/context-vacuum-linux-amd64 .
+	GOOS=windows GOARCH=amd64 go build -o bin/context-vacuum-windows-amd64.exe .
 
 .PHONY: dev
 dev:
@@ -35,7 +35,7 @@ sqlc-verify:
 
 .PHONY: install
 install:
-	go install ./cmd/context-vacuum
+	go install .
 
 .PHONY: clean
 clean:
