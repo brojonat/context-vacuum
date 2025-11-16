@@ -102,8 +102,8 @@ func main() {
 				Action:    importBookmarks,
 			},
 			{
-				Name:  "tui",
-				Usage: "Launch interactive terminal UI",
+				Name:   "tui",
+				Usage:  "Launch interactive terminal UI",
 				Action: launchTUI,
 			},
 		},

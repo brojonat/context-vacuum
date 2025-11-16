@@ -46,8 +46,9 @@ func (g *Generator) GenerateToString(ctx context.Context, opts GenerateOptions) 
 		return "", fmt.Errorf("failed to list enabled sources: %w", err)
 	}
 
+	// short circuit if no sources found
 	if len(sources) == 0 {
-		return "", fmt.Errorf("no enabled sources found")
+		return "", nil
 	}
 
 	g.logger.DebugContext(ctx, "generating context to string",
