@@ -7,7 +7,7 @@
 
 **The Problem:** LLM code assistants (Cursor, ChatGPT, Claude) often revert to
 less ideal implementations despite having newer, better alternatives (e.g.,
-ResponseAPI vs. Completions API for OpenAI, Composition API vs. Options API for
+ResponsesAPI vs. Completions API for OpenAI, Composition API vs. Options API for
 Vue, etc.). This will continue to happen as long as API churn exists and LLMs
 have training cutoff dates.
 
@@ -112,7 +112,7 @@ context-vacuum generate --output /path/to/output/claude.md
 
 ```bash
 # Build context around your API implementation
-context-vacuum add --name "ResponseAPI impl" src/api/responses.ts
+context-vacuum add --name "ResponsesAPI impl" src/api/responses.ts
 context-vacuum add --name "API Patterns" docs/api-patterns.md
 context-vacuum add --name "API Tests" tests/api.test.ts
 
